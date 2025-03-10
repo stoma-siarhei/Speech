@@ -6,9 +6,10 @@
 #include <iomanip>
 #include <string>
 #include <string_view>
+#include <list>
+#include <tuple>
+#include <type_traits>
 #include <exception>
-
-#include <include/Python.h>
 
 
 #endif // _PCH_HPP_

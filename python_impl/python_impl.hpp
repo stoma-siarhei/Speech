@@ -4,6 +4,8 @@
 
 #include <pch.hpp>
 
+#include <include/Python.h>
+
 
 using namespace std;
 
@@ -34,7 +36,7 @@ struct decoder
 
 	const object_ptr operator()() const noexcept;
 private:
-	object_ptr m_value;
+	object_ptr m_value{ nullptr };
 }; // struct decoder
 
 class executor
@@ -50,6 +52,9 @@ public:
 
 	~executor();
 
+	template <class _Func, class... _Arg>
+	const object_ptr operator()(_Func& func,  _Arg... arg) const;
+
 protected:
 	bool load_module(const object_ptr name) noexcept;
 
@@ -59,6 +64,24 @@ private:
 }; // class executor
 
 } // namespace ss::lib::python
+
+using namespace ss::lib::python;
+
+template <class T>
+size_t get_size(T& t)
+{
+	return tuple_size<T>{};
+}
+
+template <class _Func, class... _Arg>
+const object_ptr executor::operator()(_Func& func,  _Arg... arg) const
+{
+	if (object_ptr _func = decoder(m_module, func)(); _func != nullptr && PyCallable_Check(_func) != 0)
+	{
+		auto _t = std::make_tuple(std::forward<_Arg>(arg)...);
+	}
+	return nullptr;
+}
 
 
 #endif // _PYTHON_IMPL_HPP_
