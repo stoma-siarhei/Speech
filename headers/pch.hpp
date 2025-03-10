@@ -5,6 +5,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <string_view>
+#include <exception>
 
 #include <include/Python.h>
 
