@@ -31,7 +31,7 @@ struct decoder
 
 	~decoder();
 
-	const object_ptr operator()() const noexcept;
+	shared_ptr<object_t> operator()() const noexcept;
 private:
 	object_ptr m_value{ nullptr };
 }; // struct decoder
@@ -43,7 +43,7 @@ struct variable
 	~variable();
 
 	template <class _Tuple, size_t N = tuple_size_v<_Tuple>>
-	object_ptr operator()(const _Tuple& _tuple);
+	shared_ptr<object_t> operator()(const _Tuple& _tuple);
 
 protected:
 	template <class _Tuple, size_t... In>
@@ -70,7 +70,7 @@ public:
 	~executor();
 
 	template <class _Func, class... _Arg>
-	const object_ptr operator()(_Func& func,  _Arg... arg) const;
+	const long operator()(_Func& func,  _Arg... arg) const;
 
 protected:
 	bool load_module(const object_ptr name) noexcept;
@@ -80,18 +80,20 @@ private:
 	object_ptr m_module{ nullptr };
 }; // class executor
 
+void deleter(object_ptr ptr);
+
 } // namespace ss::lib::python
 
 using namespace ss::lib::python;
 
 template <class _Tuple, size_t N>
-object_ptr variable::operator()(const _Tuple& _tuple)
+shared_ptr<object_t> variable::operator()(const _Tuple& _tuple)
 {
 	m_variable = PyTuple_New(tuple_size_v<_Tuple>);
 
 	tuple_index(_tuple, make_index_sequence<N>{});
 
-	return m_variable;
+	return shared_ptr<object_t>(m_variable, deleter);
 }
 
 template <class _Tuple, size_t... In>
@@ -130,15 +132,16 @@ void variable::convert(const _Type& var, const size_t index)
 }
 
 template <class _Func, class... _Arg>
-const object_ptr executor::operator()(_Func& func,  _Arg... arg) const
+const long executor::operator()(_Func& func,  _Arg... arg) const
 {
-	if (object_ptr _func = decoder(m_module, func)(); _func != nullptr && PyCallable_Check(_func) != 0)
+	if (auto _func = decoder(m_module, func)(); _func.get() != nullptr && PyCallable_Check(_func.get()) != 0)
 	{
-		auto _t = std::make_tuple(std::forward<_Arg>(arg)...);
-		variable v;
-		auto arg = v(_t);
+		auto _t = make_tuple(std::forward<_Arg>(arg)...);
+		auto arg = variable()(_t);
+		shared_ptr<object_t> res(PyObject_CallObject(_func.get(), arg.get()), deleter);
+		return PyLong_AsLong(res.get());
 	}
-	return nullptr;
+	return -1;
 }
 
 

@@ -38,12 +38,11 @@ decoder::decoder(const object_ptr p_obj, const string_view str)
 
 decoder::~decoder()
 {
-	Py_DECREF(m_value);
 }
 
-const object_ptr decoder::operator()() const noexcept
+shared_ptr<object_t> decoder::operator()() const noexcept
 {
-	return m_value;
+	return shared_ptr<object_t>(m_value, deleter);
 }
 
 variable::variable() 
@@ -63,7 +62,7 @@ executor::executor()
 executor::executor(const char* name) 
 	: executor()
 {
-	if (!load_module(decoder(name)()))
+	if (!load_module(decoder(name)().get()))
 	{
 		string str = "Error load script - ";
 		str += name;
@@ -98,6 +97,11 @@ bool executor::load_module(const object_ptr name) noexcept
 bool executor::load_func(const object_ptr func) const noexcept
 {
 	return PyCallable_Check(func);
+}
+
+void deleter(object_ptr ptr)
+{
+	Py_DECREF(ptr);
 }
 
 } // ss::lib::python

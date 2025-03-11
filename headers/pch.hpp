@@ -8,6 +8,7 @@
 #include <string_view>
 #include <list>
 #include <tuple>
+#include <memory>
 #include <type_traits>
 #include <exception>
 

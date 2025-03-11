@@ -111,7 +111,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Build\lib\$(Configuration)_$(Platform)\;$(PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python_impl.lib;libs/python313.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>python_impl.lib;libs/python310.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,7 +134,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Build\lib\$(Configuration)_$(Platform)\;$(PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python_impl.lib;libs/python313.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>python_impl.lib;libs/python310.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,7 +152,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Build\lib\$(Configuration)_$(Platform)\;$(PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python_impl.lib;libs/python313.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>python_impl.lib;libs/python310.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -168,6 +168,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)headers;$(SolutionDir);$(PATH)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -175,7 +177,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Build\lib\$(Configuration)_$(Platform)\;$(PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python_impl.lib;libs/python313.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>python_impl.lib;libs/python310.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@ int main(int argc, char ** argv)
     try
     { 
         executor exec{ "script" };
-        exec("foo", 1, 2, 3);
+        cout << exec("foo", 1, 2, 3) << endl;
     }
     catch (runtime_error& e)
     { 
