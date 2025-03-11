@@ -46,6 +46,15 @@ const object_ptr decoder::operator()() const noexcept
 	return m_value;
 }
 
+variable::variable() 
+	: m_variable(nullptr)
+{
+}
+
+variable::~variable()
+{
+}
+
 executor::executor()
 {
 	Py_Initialize();

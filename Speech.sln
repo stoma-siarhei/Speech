@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Speech", "Speech\Speech.vcxproj", "{06D0198D-D32A-4D9D-BDD5-4FA2F4AEEA76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{017C7960-823A-494F-B701-A507B4C18E59} = {017C7960-823A-494F-B701-A507B4C18E59}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
 EndProject

@@ -4,17 +4,14 @@
 
 #include <pch.hpp>
 
-#include <include/Python.h>
+#include "python_types.hpp"
+#include "utils.hpp"
 
 
 using namespace std;
 
 namespace ss::lib::python
 {
-
-using object_t = PyObject;
-
-using object_ptr = PyObject*;
 
 struct decoder
 {
@@ -38,6 +35,26 @@ struct decoder
 private:
 	object_ptr m_value{ nullptr };
 }; // struct decoder
+
+struct variable
+{
+	variable();
+
+	~variable();
+
+	template <class _Tuple, size_t N = tuple_size_v<_Tuple>>
+	object_ptr operator()(const _Tuple& _tuple);
+
+protected:
+	template <class _Tuple, size_t... In>
+	void tuple_index(const _Tuple& _tuple, index_sequence<In...>);
+
+	template <class _Type>
+	void convert(const _Type& var, const size_t index);
+
+private:
+	object_ptr m_variable;
+}; // struct variable
 
 class executor
 {
@@ -67,10 +84,49 @@ private:
 
 using namespace ss::lib::python;
 
-template <class T>
-size_t get_size(T& t)
+template <class _Tuple, size_t N>
+object_ptr variable::operator()(const _Tuple& _tuple)
 {
-	return tuple_size<T>{};
+	m_variable = PyTuple_New(tuple_size_v<_Tuple>);
+
+	tuple_index(_tuple, make_index_sequence<N>{});
+
+	return m_variable;
+}
+
+template <class _Tuple, size_t... In>
+void variable::tuple_index(const _Tuple& _tuple, index_sequence<In...>)
+{
+	(convert(get<In>(_tuple), In), ...);
+}
+
+template <class _Type>
+void variable::convert(const _Type& var, const size_t index)
+{
+	object_ptr _py_obj;
+
+	if constexpr ((is_same_v<_Type, string>) || (is_same_v<_Type, const string>))
+	{
+		_py_obj = PyUnicode_FromString(var.data());
+	}
+	else if constexpr ((is_same_v<_Type, char*>) || (is_same_v<_Type, const char*>))
+	{
+		_py_obj = PyUnicode_FromString(var);
+	}
+	else if constexpr (is_integral_v<_Type>)
+	{
+		_py_obj = PyLong_FromLong(var);
+	}
+	else if constexpr (is_floating_point_v<_Type>)
+	{
+		_py_obj = PyFloat_FromDouble(var);
+	}
+	else
+	{
+		return;
+	}
+
+	PyTuple_SetItem(m_variable, index, _py_obj);
 }
 
 template <class _Func, class... _Arg>
@@ -79,6 +135,8 @@ const object_ptr executor::operator()(_Func& func,  _Arg... arg) const
 	if (object_ptr _func = decoder(m_module, func)(); _func != nullptr && PyCallable_Check(_func) != 0)
 	{
 		auto _t = std::make_tuple(std::forward<_Arg>(arg)...);
+		variable v;
+		auto arg = v(_t);
 	}
 	return nullptr;
 }

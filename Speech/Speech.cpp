@@ -5,9 +5,22 @@
 
 using namespace std;
 
+using namespace ss::lib::python;
+
 int main(int argc, char ** argv)
 {
-    ss::lib::python::executor exec{ "script" };
-    exec("foo", 1, 2, 3);
+    try
+    { 
+        executor exec{ "script" };
+        exec("foo", 1, 2, 3);
+    }
+    catch (runtime_error& e)
+    { 
+        cout << e.what() << endl;
+    }
+    catch (...)
+    { 
+        cout << "Unknow error" << endl;
+    }
     return 0;
 }
