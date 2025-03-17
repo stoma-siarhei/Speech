@@ -187,7 +187,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libs\python310.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libs\python313.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

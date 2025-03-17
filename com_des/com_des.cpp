@@ -26,9 +26,21 @@ bool deserialize::operator()(int argc, char** argv)
 	return parse_command_line(argc, argv);
 }
 
-string_view deserialize::operator[](const string_view s) const noexcept
+bool deserialize::operator()(const string& str)
 {
-	return string_view("");
+	return parse_command_line(str);
+}
+
+string_view deserialize::operator[](const string_view s) const
+{
+	if (auto it = m_map_params.find(s); it == end(m_map_params))
+	{
+		string str{ "No find element - \"" };
+		str += s;
+		str += "\"";
+		throw out_of_range(str);
+	}
+	else return m_map_params.at(s);
 }
 
 bool ss::lib::cl::deserialize::parse_command(const string_view str)

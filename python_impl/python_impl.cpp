@@ -16,22 +16,12 @@ decoder::decoder(const string& str)
 {
 }
 
-decoder::decoder(const string_view str) 
-	: decoder(str.data())
-{
-}
-
 decoder::decoder(const object_ptr p_obj, const char* str)
 {
 	m_value = PyObject_GetAttrString(p_obj, str);
 }
 
 decoder::decoder(const object_ptr p_obj, const string& str) 
-	: decoder(p_obj, str.data())
-{
-}
-
-decoder::decoder(const object_ptr p_obj, const string_view str)
 	: decoder(p_obj, str.data())
 {
 }
@@ -71,11 +61,6 @@ executor::executor(const char* name)
 }
 
 executor::executor(const string& name) 
-	: executor(name.data())
-{
-}
-
-executor::executor(const string_view name) 
 	: executor(name.data())
 {
 }

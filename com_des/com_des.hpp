@@ -25,7 +25,9 @@ public:
 
 	bool operator()(int argc, char** argv);
 
-	string_view operator[](const string_view s) const noexcept;
+	bool operator()(const string& str);
+
+	string_view operator[](const string_view s) const;
 
 protected:
 	bool parse_command(const string_view str);

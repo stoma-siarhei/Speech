@@ -21,13 +21,9 @@ struct decoder
 
 	decoder(const string& str);
 
-	decoder(const string_view str);
-
 	decoder(const object_ptr p_obj, const char* str);
 
 	decoder(const object_ptr p_obj, const string& str);
-
-	decoder(const object_ptr p_obj, const string_view str);
 
 	~decoder();
 
@@ -64,8 +60,6 @@ public:
 	executor(const char* name);
 
 	executor(const string& name);
-
-	executor(const string_view name);
 
 	~executor();
 
