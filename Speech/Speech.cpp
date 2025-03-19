@@ -60,8 +60,12 @@ int main(int argc, char ** argv)
         try
         {
             executor exec{ "script" };
-            auto [r, t] = exec("foo", 1, 2, 3);
-            cout << r << endl;
+            auto res = exec("foo", 1, 2, 3);
+            if (res.has_value())
+            {
+                auto [r, s] = res.value();
+                cout << "Result - " << r << "\tTime - " << executor::microsecond(s).count() << " mcs" << endl;
+            }
         }
         catch (runtime_error& e)
         {

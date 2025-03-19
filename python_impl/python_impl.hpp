@@ -54,6 +54,7 @@ private:
 
 class executor
 {
+
 public:
 	using second = chrono::duration<double>;
 
@@ -61,7 +62,7 @@ public:
 
 	using microsecond = chrono::duration<double, ratio_multiply<second::period, micro>>;
 
-	using result_exec_t = tuple<long, second>;
+	using result_exec_t = optional<tuple<long, second>>;
 
 public:
 	executor();
@@ -147,11 +148,9 @@ const executor::result_exec_t executor::operator()(_Func& func,  _Arg... arg) co
 	
 		const auto _stop{ chrono::steady_clock::now()};
 		
-		return { PyLong_AsLong(res.get()), _stop - _start };
+		return { { PyLong_AsLong(res.get()), _stop - _start } };
 	}
-	string str = "Error decoder function script - ";
-	str += func;
-	throw runtime_error(str);
+	return {};
 }
 
 
