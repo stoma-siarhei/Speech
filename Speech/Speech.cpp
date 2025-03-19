@@ -60,7 +60,8 @@ int main(int argc, char ** argv)
         try
         {
             executor exec{ "script" };
-            cout << exec("foo", 1, 2, 3) << endl;
+            auto [r, t] = exec("foo", 1, 2, 3);
+            cout << r << endl;
         }
         catch (runtime_error& e)
         {

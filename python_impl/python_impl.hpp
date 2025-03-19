@@ -55,6 +55,15 @@ private:
 class executor
 {
 public:
+	using second = chrono::duration<double>;
+
+	using millisecond = chrono::duration<double, ratio_multiply<second::period, milli>>;
+
+	using microsecond = chrono::duration<double, ratio_multiply<second::period, micro>>;
+
+	using result_exec_t = tuple<long, second>;
+
+public:
 	executor();
 
 	executor(const char* name);
@@ -64,7 +73,7 @@ public:
 	~executor();
 
 	template <class _Func, class... _Arg>
-	const long operator()(_Func& func,  _Arg... arg) const;
+	const result_exec_t operator()(_Func& func,  _Arg... arg) const;
 
 protected:
 	bool load_module(const object_ptr name) noexcept;
@@ -126,16 +135,23 @@ void variable::convert(const _Type& var, const size_t index)
 }
 
 template <class _Func, class... _Arg>
-const long executor::operator()(_Func& func,  _Arg... arg) const
+const executor::result_exec_t executor::operator()(_Func& func,  _Arg... arg) const
 {
+	const auto _start{ chrono::steady_clock::now()};
+
 	if (auto _func = decoder(m_module, func)(); _func.get() != nullptr && PyCallable_Check(_func.get()) != 0)
 	{
 		auto _t = make_tuple(std::forward<_Arg>(arg)...);
 		auto arg = variable()(_t);
 		shared_ptr<object_t> res(PyObject_CallObject(_func.get(), arg.get()), deleter);
-		return PyLong_AsLong(res.get());
+	
+		const auto _stop{ chrono::steady_clock::now()};
+		
+		return { PyLong_AsLong(res.get()), _stop - _start };
 	}
-	return -1;
+	string str = "Error decoder function script - ";
+	str += func;
+	throw runtime_error(str);
 }
 
 

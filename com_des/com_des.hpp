@@ -40,7 +40,7 @@ private:
 	set_t m_set_command;
 	un_map_t m_map_params;
 
-	string m_command{ "-str -file -script -func" };
+	string m_command{ "-str -char -byte -short -int -long -float -double -bool -file -script -func" };
 	string m_command_line;
 }; // class deserialize
 

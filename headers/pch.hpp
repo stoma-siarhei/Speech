@@ -14,6 +14,9 @@
 #include <algorithm>
 #include <type_traits>
 #include <exception>
+#include <chrono>
+#include <ratio>
+#include <cmath>
 
 
 #endif // _PCH_HPP_
